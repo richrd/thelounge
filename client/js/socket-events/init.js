@@ -43,7 +43,7 @@ socket.on("init", function(data) {
 		const viewport = $("#viewport");
 
 		if ($(window).outerWidth() >= utils.mobileViewportPixels) {
-			slideoutMenu.toggle(storage.get("thelounge.state.sidebar") === "true");
+			slideoutMenu.toggle(storage.get("thelounge.state.sidebar") !== "false");
 			viewport.toggleClass("rt", storage.get("thelounge.state.userlist") === "true");
 		}
 
