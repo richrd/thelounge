@@ -50,10 +50,11 @@
 					>
 						<div class="show-more">
 							<button
+								v-if="channel.moreHistoryAvailable"
 								ref="loadMoreButton"
 								:disabled="channel.historyLoading || !$root.connected"
 								class="btn"
-								@click="onShowMoreClick"
+								@click="loadMoreHistory"
 							>
 								<span v-if="channel.historyLoading">Loading…</span>
 								<span v-else>Show older messages</span>
@@ -108,7 +109,7 @@ export default {
 	},
 	created() {
 		if (window.IntersectionObserver) {
-			this.historyObserver = new window.IntersectionObserver(loadMoreHistory, {
+			this.historyObserver = new window.IntersectionObserver((entries) => this.onLoadButtonIntersection(entries), {
 				root: this.$refs.chat,
 			});
 		}
@@ -128,7 +129,7 @@ export default {
 		}
 	},
 	methods: {
-		onShowMoreClick() {
+		loadMoreHistory() {
 			let lastMessage = this.channel.messages[0];
 			lastMessage = lastMessage ? lastMessage.id : -1;
 
@@ -139,16 +140,16 @@ export default {
 				lastId: lastMessage,
 			});
 		},
+		onLoadButtonIntersection(entries) {
+			entries.forEach((entry) => {
+				if (!entry.isIntersecting) {
+					return;
+				}
+
+				this.loadMoreHistory();
+			});
+		},
 	},
 };
 
-function loadMoreHistory(entries) {
-	entries.forEach((entry) => {
-		if (!entry.isIntersecting) {
-			return;
-		}
-
-		entry.target.click();
-	});
-}
 </script>
