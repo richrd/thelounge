@@ -4,9 +4,14 @@
 		class="empty">
 		You are not connected to any networks yet.
 	</div>
-	<div
+	<Draggable
 		v-else
-		class="networks">
+		:list="networks"
+		:options="{ handle: '.lobby', draggable: '.network', ghostClass: 'network-placeholder', disabled: isSortingEnabled }"
+		class="networks"
+		@change="onNetworkSort"
+		@start="onDragStart"
+		@end="onDragEnd">
 		<div
 			v-for="network in networks"
 			:id="'network-' + network.uuid"
@@ -31,19 +36,27 @@
 				:channel="network.channels[0]"
 				@toggleJoinChannel="network.isJoinChannelShown = !network.isJoinChannelShown" />
 
-			<div class="channels">
+			<Draggable
+				:options="{ draggable: '.chan', ghostClass: 'chan-placeholder', disabled: isSortingEnabled }"
+				:list="network.channels"
+				class="channels"
+				@change="onChannelSort"
+				@start="onDragStart"
+				@end="onDragEnd">
 				<Channel
-					v-for="channel in getChannelsWithoutLobby(network)"
+					v-for="(channel, index) in network.channels"
+					v-if="index > 0"
 					:key="channel.id"
 					:channel="channel"
 					:network="network"
 					:active-channel="activeChannel" />
-			</div>
+			</Draggable>
 		</div>
-	</div>
+	</Draggable>
 </template>
 
 <script>
+import Draggable from "vuedraggable";
 import NetworkLobby from "./NetworkLobby.vue";
 import Channel from "./Channel.vue";
 import JoinChannel from "./JoinChannel.vue";
@@ -56,14 +69,26 @@ export default {
 		JoinChannel,
 		NetworkLobby,
 		Channel,
+		Draggable,
 	},
 	props: {
 		activeChannel: Object,
 		networks: Array,
 	},
+	computed: {
+		isSortingEnabled() {
+			const isTouch = !!("ontouchstart" in window || (window.DocumentTouch && document instanceof window.DocumentTouch));
+
+			// TODO: Implement a way to sort on touch devices
+			return isTouch;
+		},
+	},
 	methods: {
-		getChannelsWithoutLobby(network) {
-			return network.channels.slice(1);
+		onDragStart(e) {
+			e.target.classList.add("ui-sortable-helper");
+		},
+		onDragEnd(e) {
+			e.target.classList.remove("ui-sortable-helper");
 		},
 		onNetworkSort(e) {
 			if (!e.moved) {
