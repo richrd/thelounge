@@ -6,6 +6,7 @@ const pkg = require("../package.json");
 const Client = require("./client");
 const ClientManager = require("./clientManager");
 const express = require("express");
+const compression = require("compression");
 const fs = require("fs");
 const path = require("path");
 const io = require("socket.io");
@@ -49,7 +50,7 @@ module.exports = function() {
 		.disable("x-powered-by")
 		.use(allRequests)
 		.use(index)
-		.use(express.static(path.join(__dirname, "..", "public"), staticOptions))
+		.use(compression(), express.static(path.join(__dirname, "..", "public"), staticOptions))
 		.use("/storage/", express.static(Helper.getStoragePath(), staticOptions));
 
 	if (Helper.config.fileUpload.enable) {
