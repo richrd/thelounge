@@ -48,9 +48,10 @@ module.exports = function() {
 
 	const app = express()
 		.disable("x-powered-by")
+		.use(compression())
 		.use(allRequests)
 		.use(index)
-		.use(compression(), express.static(path.join(__dirname, "..", "public"), staticOptions))
+		.use(express.static(path.join(__dirname, "..", "public"), staticOptions))
 		.use("/storage/", express.static(Helper.getStoragePath(), staticOptions));
 
 	if (Helper.config.fileUpload.enable) {

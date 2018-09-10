@@ -43,6 +43,7 @@
     "chalk": "2.4.1",
     "cheerio": "0.22.0",
     "commander": "2.18.0",
+    "compression": "1.7.3",
     "express": "4.16.3",
     "file-type": "9.0.0",
     "filenamify": "2.1.0",
