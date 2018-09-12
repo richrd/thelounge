@@ -720,15 +720,15 @@
     source-map "^0.5.6"
     vue-template-es2015-compiler "^1.6.0"
 
-"@vue/server-test-utils@1.0.0-beta.24":
-  version "1.0.0-beta.24"
-  resolved "https://registry.yarnpkg.com/@vue/server-test-utils/-/server-test-utils-1.0.0-beta.24.tgz#caa223b37be5e5184eb502fab3928421ef34a209"
+"@vue/server-test-utils@1.0.0-beta.25":
+  version "1.0.0-beta.25"
+  resolved "https://registry.yarnpkg.com/@vue/server-test-utils/-/server-test-utils-1.0.0-beta.25.tgz#11e4ac087bb163bdab7cafd4c299377a4893c506"
   dependencies:
     cheerio "^1.0.0-rc.2"
 
-"@vue/test-utils@1.0.0-beta.24":
-  version "1.0.0-beta.24"
-  resolved "https://registry.yarnpkg.com/@vue/test-utils/-/test-utils-1.0.0-beta.24.tgz#da7c3165f49f57f23fdb98caccba0f511effb76f"
+"@vue/test-utils@1.0.0-beta.25":
+  version "1.0.0-beta.25"
+  resolved "https://registry.yarnpkg.com/@vue/test-utils/-/test-utils-1.0.0-beta.25.tgz#4703076de3076bac42cdd242cd53e6fb8752ed8c"
   dependencies:
     lodash "^4.17.4"
 
@@ -7911,9 +7911,9 @@ vue-hot-reload-api@^2.3.0:
   version "2.3.0"
   resolved "https://registry.yarnpkg.com/vue-hot-reload-api/-/vue-hot-reload-api-2.3.0.tgz#97976142405d13d8efae154749e88c4e358cf926"
 
-vue-loader@15.4.1:
-  version "15.4.1"
-  resolved "https://registry.yarnpkg.com/vue-loader/-/vue-loader-15.4.1.tgz#10c2da6f50ce5fc6bff2317dcbd1dccf4b3c7702"
+vue-loader@15.4.2:
+  version "15.4.2"
+  resolved "https://registry.yarnpkg.com/vue-loader/-/vue-loader-15.4.2.tgz#812bb26e447dd3b84c485eb634190d914ce125e2"
   dependencies:
     "@vue/component-compiler-utils" "^2.0.0"
     hash-sum "^1.0.2"
