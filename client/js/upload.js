@@ -38,6 +38,8 @@ function initialize() {
 		$overlay.removeClass("is-dragover");
 		return false;
 	});
+
+	return instance;
 }
 
 /**

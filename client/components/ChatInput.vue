@@ -141,7 +141,13 @@ export default {
 		});
 
 		if (this.$root.isFileUploadEnabled) {
-			upload.initialize();
+			this.uploader = upload.initialize();
+			this.$refs.input.addEventListener("paste", this.onPaste);
+		}
+	},
+	beforeDestroy() {
+		if (this.$root.isFileUploadEnabled) {
+			this.$refs.input.removeEventListener("paste", this.onPaste);
 		}
 	},
 	destroyed() {
@@ -213,6 +219,31 @@ export default {
 		},
 		openFileUpload() {
 			this.$refs.uploadInput.click();
+		},
+		onPaste(event) {
+			// Handle file uploading via clipboard (usually images)
+			if (!event.clipboardData) {
+				return;
+			}
+
+			const items = event.clipboardData.items;
+
+			// Proceed if theres exactly one item
+			if (!items || items.length !== 1) {
+				return;
+			}
+
+			// Only handle files
+			if (items[0].kind !== "file") {
+				return;
+			}
+
+			const file = items[0].getAsFile();
+
+			if (file) {
+				this.uploader.submitFiles([file]);
+				event.preventDefault();
+			}
 		},
 	},
 };
