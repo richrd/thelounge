@@ -1103,8 +1103,8 @@ background on hover (unless active) */
 }
 
 .scroll-down {
-	position: absolute;
-	bottom: 16px;
+	position: fixed;
+	bottom: 61px;
 	right: 16px;
 	z-index: 2;
 	transition: right 0.2s ease-in-out;
