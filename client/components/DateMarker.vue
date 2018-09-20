@@ -47,7 +47,7 @@ export default {
 			const today = new Date();
 			const yesterday = new Date(new Date(today).setDate(today.getDate() - 1));
 
-			let dateString = (new Date(this.message.time)).toLocaleDateString("en-GB", {month: "long", year: "numeric", day: "numeric"});
+			let dateString = messageDate.toLocaleDateString("en-GB", {month: "long", year: "numeric", day: "numeric"});
 
 			switch (messageDate.toDateString()) {
 			case (today.toDateString()):
