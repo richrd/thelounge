@@ -87,9 +87,12 @@ const condensedTypes = [
 ];
 const condensedTypesQuery = "." + condensedTypes.join(", .");
 
+const dateTimeLocale = "en-GB";
+
 module.exports = {
 	colorCodeMap,
 	commands,
 	condensedTypes,
 	condensedTypesQuery,
+	dateTimeLocale,
 };

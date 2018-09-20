@@ -60,6 +60,8 @@ import LinkPreview from "./LinkPreview.vue";
 import ParsedMessage from "./ParsedMessage.vue";
 import MessageTypes from "./MessageTypes";
 
+const constants = require("../js/constants");
+
 MessageTypes.ParsedMessage = ParsedMessage;
 MessageTypes.LinkPreview = LinkPreview;
 MessageTypes.Username = Username;
@@ -80,7 +82,7 @@ export default {
 				options.second = "2-digit";
 			}
 
-			return (new Date(this.message.time)).toLocaleTimeString("en-GB", options);
+			return (new Date(this.message.time)).toLocaleTimeString(constants.dateTimeLocale, options);
 		},
 		messageComponent() {
 			return "message-" + this.message.type;
