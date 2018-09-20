@@ -87,15 +87,9 @@ const condensedTypes = [
 ];
 const condensedTypesQuery = "." + condensedTypes.join(", .");
 
-const timeFormats = {
-	msgDefault: "HH:mm",
-	msgWithSeconds: "HH:mm:ss",
-};
-
 module.exports = {
 	colorCodeMap,
 	commands,
 	condensedTypes,
 	condensedTypesQuery,
-	timeFormats,
 };

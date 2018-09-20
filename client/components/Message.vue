@@ -60,9 +60,6 @@ import LinkPreview from "./LinkPreview.vue";
 import ParsedMessage from "./ParsedMessage.vue";
 import MessageTypes from "./MessageTypes";
 
-const moment = require("moment");
-const constants = require("../js/constants");
-
 MessageTypes.ParsedMessage = ParsedMessage;
 MessageTypes.LinkPreview = LinkPreview;
 MessageTypes.Username = Username;
@@ -77,9 +74,13 @@ export default {
 	},
 	computed: {
 		messageTime() {
-			const format = this.$root.settings.showSeconds ? constants.timeFormats.msgWithSeconds : constants.timeFormats.msgDefault;
+			const options = {hour: "2-digit", minute: "2-digit"};
 
-			return moment(this.message.time).format(format);
+			if (this.$root.settings.showSeconds) {
+				options.second = "2-digit";
+			}
+
+			return (new Date(this.message.time)).toLocaleTimeString("en-GB", options);
 		},
 		messageComponent() {
 			return "message-" + this.message.type;

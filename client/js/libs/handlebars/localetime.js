@@ -1,7 +1,8 @@
 "use strict";
 
-const moment = require("moment");
-
 module.exports = function(time) {
-	return moment(time).format("D MMMM YYYY, HH:mm:ss");
+	const dateStr = (new Date(time)).toLocaleDateString("en-GB", {month: "long", year: "numeric", day: "numeric"});
+	const timeStr = (new Date(time)).toLocaleTimeString("en-GB", {hour: "2-digit", minute: "2-digit", second: "2-digit"});
+
+	return dateStr + ", " + timeStr; // D MMMM YYYY, HH:mm:ss
 };

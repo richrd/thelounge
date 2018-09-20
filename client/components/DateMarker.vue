@@ -11,7 +11,6 @@
 </template>
 
 <script>
-const moment = require("moment");
 
 export default {
 	name: "DateMarker",
@@ -20,7 +19,7 @@ export default {
 	},
 	computed: {
 		localeDate() {
-			return moment(this.message.time).format("D MMMM YYYY");
+			return (new Date(this.message.time)).toLocaleDateString("en-GB", {month: "long", year: "numeric", day: "numeric"});
 		},
 	},
 	mounted() {
@@ -33,7 +32,7 @@ export default {
 	},
 	methods: {
 		hoursPassed() {
-			return moment.duration(moment().diff(moment(this.message.time))).asHours();
+			return (Date.now() - Date.parse(this.message.time)) / 3600000;
 		},
 		dayChange() {
 			this.$forceUpdate();
@@ -43,13 +42,23 @@ export default {
 			}
 		},
 		friendlyDate() {
-			// See http://momentjs.com/docs/#/displaying/calendar-time/
-			return moment(this.message.time).calendar(null, {
-				sameDay: "[Today]",
-				lastDay: "[Yesterday]",
-				lastWeek: "D MMMM YYYY",
-				sameElse: "D MMMM YYYY",
-			});
+			const messageDate = new Date(this.message.time);
+
+			const today = new Date();
+			const yesterday = new Date(new Date(today).setDate(today.getDate() - 1));
+
+			let dateString = (new Date(this.message.time)).toLocaleDateString("en-GB", {month: "long", year: "numeric", day: "numeric"});
+
+			switch (messageDate.toDateString()) {
+			case (today.toDateString()):
+				dateString = "Today";
+				break;
+			case (yesterday.toDateString()):
+				dateString = "Yesterday";
+				break;
+			}
+
+			return dateString;
 		},
 	},
 };
