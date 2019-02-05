@@ -9,6 +9,7 @@ const fileType = require("file-type");
 const readChunk = require("read-chunk");
 const crypto = require("crypto");
 const isUtf8 = require("is-utf8");
+const removeExifTransformer = require("exif-be-gone");
 const log = require("../log");
 
 const whitelist = [
@@ -51,19 +52,46 @@ class Uploader {
 				destPath = path.join(Helper.getFileUploadPath(), randomName.substring(0, 2), randomName);
 			} while (fs.existsSync(destPath));
 
-			fsextra.move(data.file.pathName, destPath).then(() => {
-				const slug = encodeURIComponent(path.basename(data.file.pathName));
-				const url = `uploads/${randomName}/${slug}`;
-				socket.emit("upload:success", url);
-			}).catch(() => {
-				log.warn(`Unable to move uploaded file "${data.file.pathName}"`);
+			if (Uploader.getFileType(data.file.pathName) === "image/jpeg") {
+				// For JPEG files remove EXIF metadata before moving to correct path
+				fsextra.ensureDir(path.dirname(destPath));
+				const reader = fs.createReadStream(data.file.pathName);
+				const writer = fs.createWriteStream(destPath);
 
-				// Emit failed upload to the client if file move fails
-				socket.emit("siofu_error", {
-					id: data.file.id,
-					message: "Unable to move uploaded file",
+				writer.on("close", () => {
+					const slug = encodeURIComponent(path.basename(data.file.pathName));
+					const url = `uploads/${randomName}/${slug}`;
+					socket.emit("upload:success", url);
+					fs.unlinkSync(data.file.pathName);
 				});
-			});
+
+				writer.on("error", () => {
+					log.warn(`Unable to move uploaded file "${data.file.pathName}"`);
+
+					// Emit failed upload to the client if file write fails
+					socket.emit("siofu_error", {
+						id: data.file.id,
+						message: "Unable to move uploaded file",
+					});
+				});
+
+				reader.pipe(new removeExifTransformer()).pipe(writer);
+			} else {
+				// For all other files simply move to correct path
+				fsextra.move(data.file.pathName, destPath).then(() => {
+					const slug = encodeURIComponent(path.basename(data.file.pathName));
+					const url = `uploads/${randomName}/${slug}`;
+					socket.emit("upload:success", url);
+				}).catch(() => {
+					log.warn(`Unable to move uploaded file "${data.file.pathName}"`);
+
+					// Emit failed upload to the client if file move fails
+					socket.emit("siofu_error", {
+						id: data.file.id,
+						message: "Unable to move uploaded file",
+					});
+				});
+			}
 		});
 
 		uploader.on("error", (data) => {
